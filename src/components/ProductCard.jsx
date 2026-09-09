@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Heart, MapPin, Star } from "lucide-react";
 import "./ProductCard.css";
 
@@ -6,24 +7,32 @@ function ProductCard({ product }) {
         <article className="product-card">
 
             {/* Product Image */}
-            <div className="product-image-container">
-                <img
-                    src={product.image}
-                    alt={product.title}
-                    className="product-image"
-                />
+            <Link
+                to={`/product/${product.id}`}
+                className="product-image-link"
+            >
+                <div className="product-image-container">
+                    <img
+                        src={product.images[0]}
+                        alt={product.title}
+                        className="product-image"
+                    />
 
-                <button
-                    className="favorite-button"
-                    aria-label="Add to favorites"
-                >
-                    <Heart size={18} />
-                </button>
+                    <button
+                        className="favorite-button"
+                        aria-label="Add to favorites"
+                        onClick={(event) => event.preventDefault()}
+                    >
+                        <Heart size={18} />
+                    </button>
 
-                <span className={`status-badge ${product.status.toLowerCase()}`}>
-                    {product.status}
-                </span>
-            </div>
+                    <span
+                        className={`status-badge ${product.status.toLowerCase()}`}
+                    >
+                        {product.status}
+                    </span>
+                </div>
+            </Link>
 
             {/* Product Information */}
             <div className="product-info">
@@ -32,9 +41,14 @@ function ProductCard({ product }) {
                     {product.category}
                 </div>
 
-                <h3 className="product-title">
-                    {product.title}
-                </h3>
+                <Link
+                    to={`/product/${product.id}`}
+                    className="product-title-link"
+                >
+                    <h3 className="product-title">
+                        {product.title}
+                    </h3>
+                </Link>
 
                 <div className="product-price">
                     KSh {product.price.toLocaleString()}
