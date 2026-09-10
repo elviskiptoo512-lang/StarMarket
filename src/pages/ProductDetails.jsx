@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import {
     ArrowLeft,
     Heart,
@@ -14,6 +14,7 @@ import "./ProductDetails.css";
 
 function ProductDetails() {
     const { id } = useParams();
+    const navigate = useNavigate();
 
     const product = products.find(
         (item) => item.id === Number(id)
@@ -148,7 +149,12 @@ function ProductDetails() {
 
                     <div className="details-actions">
 
-                        <button className="contact-button">
+                        <button
+                            className="contact-button"
+                            onClick={() =>
+                                navigate(`/messages?seller=${encodeURIComponent(product.seller)}&product=${product.id}`)
+                            }
+                        >
                             <MessageCircle size={18} />
                             Contact Seller
                         </button>
