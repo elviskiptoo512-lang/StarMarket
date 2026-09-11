@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {
@@ -16,12 +17,14 @@ function ProductDetails() {
     const { id } = useParams();
     const navigate = useNavigate();
 
+    const [selectedImage, setSelectedImage] = useState(0);
+    const [isFavorite, setIsFavorite] = useState(false);
+    const [showOffer, setShowOffer] = useState(false);
+    const [offer, setOffer] = useState("");
+
     const product = products.find(
         (item) => item.id === Number(id)
     );
-
-    const [selectedImage, setSelectedImage] = useState(0);
-    const [isFavorite, setIsFavorite] = useState(false);
 
     if (!product) {
         return (
@@ -40,10 +43,20 @@ function ProductDetails() {
         );
     }
 
+    const handleSendOffer = () => {
+        if (!offer) return;
+
+        alert(
+            `Offer of KSh ${Number(offer).toLocaleString()} sent to ${product.seller}`
+        );
+
+        setShowOffer(false);
+        setOffer("");
+    };
+
     return (
         <main className="product-details-page">
 
-            {/* Back */}
             <Link to="/browse" className="back-button">
                 <ArrowLeft size={18} />
                 Back to Browse
@@ -51,11 +64,11 @@ function ProductDetails() {
 
             <section className="product-details-container">
 
-                {/* ================= IMAGE GALLERY ================= */}
-
+                {/* Product Gallery */}
                 <div className="product-gallery">
 
                     <div className="main-product-image">
+
                         <img
                             src={product.images[selectedImage]}
                             alt={product.title}
@@ -78,11 +91,11 @@ function ProductDetails() {
                         >
                             {product.status}
                         </span>
+
                     </div>
 
-                    {/* Thumbnails */}
-
                     <div className="product-thumbnails">
+
                         {product.images.map((image, index) => (
                             <button
                                 key={index}
@@ -96,12 +109,12 @@ function ProductDetails() {
                                 />
                             </button>
                         ))}
+
                     </div>
 
                 </div>
 
-                {/* ================= PRODUCT INFO ================= */}
-
+                {/* Product Information */}
                 <div className="product-details-info">
 
                     <span className="details-category">
@@ -120,8 +133,6 @@ function ProductDetails() {
                         </span>
                     )}
 
-                    {/* Meta */}
-
                     <div className="details-meta">
 
                         <span>
@@ -135,8 +146,6 @@ function ProductDetails() {
 
                     </div>
 
-                    {/* Description */}
-
                     <div className="description-section">
 
                         <h3>Description</h3>
@@ -146,27 +155,32 @@ function ProductDetails() {
                     </div>
 
                     {/* Actions */}
-
                     <div className="details-actions">
 
                         <button
                             className="contact-button"
                             onClick={() =>
-                                navigate(`/messages?seller=${encodeURIComponent(product.seller)}&product=${product.id}`)
+                                navigate(
+                                    `/messages?seller=${encodeURIComponent(
+                                        product.seller
+                                    )}&product=${product.id}`
+                                )
                             }
                         >
                             <MessageCircle size={18} />
                             Contact Seller
                         </button>
 
-                        <button className="offer-button">
+                        <button
+                            className="offer-button"
+                            onClick={() => setShowOffer(true)}
+                        >
                             Make an Offer
                         </button>
 
                     </div>
 
                     {/* Seller */}
-
                     <div className="seller-card">
 
                         <div className="seller-avatar-large">
@@ -176,6 +190,7 @@ function ProductDetails() {
                         <div className="seller-card-info">
 
                             <div className="seller-name">
+
                                 <strong>{product.seller}</strong>
 
                                 {product.verified && (
@@ -184,12 +199,20 @@ function ProductDetails() {
                                         Daystar Verified
                                     </span>
                                 )}
+
                             </div>
 
                             <div className="seller-rating-large">
-                                <Star size={15} fill="currentColor" />
+
+                                <Star
+                                    size={15}
+                                    fill="currentColor"
+                                />
+
                                 <strong>{product.rating}</strong>
+
                                 <span>Seller rating</span>
+
                             </div>
 
                         </div>
@@ -199,6 +222,50 @@ function ProductDetails() {
                 </div>
 
             </section>
+
+            {/* Make Offer Modal */}
+            {showOffer && (
+                <div className="offer-overlay">
+
+                    <div className="offer-modal">
+
+                        <button
+                            className="offer-close"
+                            onClick={() => setShowOffer(false)}
+                            aria-label="Close offer"
+                        >
+                            ×
+                        </button>
+
+                        <h2>Make an Offer</h2>
+
+                        <p>{product.title}</p>
+
+                        <label htmlFor="offer">
+                            Your Offer (KSh)
+                        </label>
+
+                        <input
+                            id="offer"
+                            type="number"
+                            placeholder={product.price}
+                            value={offer}
+                            onChange={(event) =>
+                                setOffer(event.target.value)
+                            }
+                        />
+
+                        <button
+                            className="submit-offer"
+                            onClick={handleSendOffer}
+                        >
+                            Send Offer
+                        </button>
+
+                    </div>
+
+                </div>
+            )}
 
         </main>
     );

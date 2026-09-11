@@ -479,3 +479,83 @@
         gap: 3px;
     }
 }
+
+.offer-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.45);
+}
+
+.offer-modal {
+    position: relative;
+    width: 100%;
+    max-width: 420px;
+    padding: 28px;
+    background: #ffffff;
+    border-radius: 14px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+}
+
+.offer-modal h2 {
+    margin: 0;
+    color: #172033;
+}
+
+.offer-modal p {
+    margin: 6px 0 22px;
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.offer-modal label {
+    display: block;
+    margin-bottom: 7px;
+    color: #374151;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.offer-modal input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    outline: none;
+}
+
+.offer-modal input:focus {
+    border-color: #003b73;
+}
+
+.offer-close {
+    position: absolute;
+    top: 12px;
+    right: 15px;
+    border: none;
+    background: none;
+    color: #6b7280;
+    font-size: 25px;
+    cursor: pointer;
+}
+
+.submit-offer {
+    width: 100%;
+    margin-top: 15px;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: #003b73;
+    color: #ffffff;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.submit-offer:hover {
+    background: #002b54;
+}
