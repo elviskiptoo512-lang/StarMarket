@@ -44,10 +44,15 @@ function ProductDetails() {
     }
 
     const handleSendOffer = () => {
-        if (!offer) return;
+        const amount = Number(offer);
 
-        alert(
-            `Offer of KSh ${Number(offer).toLocaleString()} sent to ${product.seller}`
+        if (!amount || amount <= 0) {
+            alert("Please enter a valid offer amount.");
+            return;
+        }
+
+        navigate(
+            `/messages?seller=${encodeURIComponent(product.seller)}&product=${product.id}&offer=${amount}`
         );
 
         setShowOffer(false);

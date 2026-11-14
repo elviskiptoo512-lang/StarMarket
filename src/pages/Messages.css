@@ -394,3 +394,89 @@
     background: #003b73;
     color: #ffffff;
 }
+
+.offer-card {
+    margin: 0 20px 15px;
+    padding: 15px;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    background: #ffffff;
+}
+
+.offer-card-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.offer-card-header strong {
+    color: #172033;
+    font-size: 14px;
+}
+
+.offer-card-header span {
+    padding: 4px 8px;
+    border-radius: 5px;
+    background: #fff7df;
+    color: #9a6700;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.offer-prices {
+    display: flex;
+    gap: 40px;
+}
+
+.offer-prices div {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.offer-prices small {
+    color: #9ca3af;
+    font-size: 11px;
+}
+
+.offer-prices strong {
+    color: #003b73;
+    font-size: 15px;
+}
+
+.offer-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 15px;
+}
+
+.offer-actions button {
+    flex: 1;
+    padding: 9px;
+    border-radius: 7px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.accept-offer {
+    border: none;
+    background: #003b73;
+    color: white;
+}
+
+.decline-offer {
+    border: 1px solid #d1d5db;
+    background: white;
+    color: #374151;
+}
+
+.offer-card-header span.accepted {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.offer-actions button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}

@@ -10,6 +10,8 @@ function Messages() {
     const [messages, setMessages] = useState([]);
     const seller = searchParams.get("seller");
     const productId = searchParams.get("product");
+    const offerAmount = searchParams.get("offer");
+    const [offerStatus, setOfferStatus] = useState("Pending");
 
     const product = products.find(
         (item) => item.id === Number(productId)
@@ -85,8 +87,44 @@ function Messages() {
                                             KSh {product.price.toLocaleString()}
                                         </span>
                                     </div>
-                                </div>
+                                    {offerAmount && (
+                                        <div className="offer-card">
+                                            <div className="offer-card-header">
+                                                <strong>Offer</strong>
+                                                <span>{offerStatus}</span>
+                                            </div>
 
+                                            <div className="offer-prices">
+                                                <div>
+                                                    <small>Asking price</small>
+                                                    <strong>KSh {product.price.toLocaleString()}</strong>
+                                                </div>
+                                                <div>
+                                                    <small>Offer</small>
+                                                    <strong>KSh {Number(offerAmount).toLocaleString()}</strong>
+                                                </div>
+                                            </div>
+
+                                            <div className="offer-actions">
+                                                <button
+                                                    className="accept-offer"
+                                                    onClick={() => setOfferStatus("Accepted")}
+                                                    disabled={offerStatus !== "Pending"}
+                                                >
+                                                    Accept
+                                                </button>
+
+                                                <button
+                                                    className="decline-offer"
+                                                    onClick={() => setOfferStatus("Declined")}
+                                                    disabled={offerStatus !== "Pending"}
+                                                >
+                                                    Decline
+                                                </button>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
                                 <div className="chat-messages">
                                     {messages.map((item, index) => (
                                         <div key={index} className="message-bubble buyer-message">
