@@ -4,6 +4,8 @@ import Home from "./pages/Home";
 import Browse from "./pages/Browse";
 import ProductDetails from "./pages/ProductDetails";
 import Messages from "./pages/Messages";
+import AddProduct from "./pages/AddProduct";
+
 function App() {
   return (
     <BrowserRouter>
@@ -14,6 +16,7 @@ function App() {
         <Route path="/browse" element={<Browse />} />
         <Route path="/product/:id" element={<ProductDetails />} />
         <Route path="/messages" element={<Messages />} />
+        <Route path="/add-product" element={<AddProduct />} />
       </Routes>
     </BrowserRouter>
   );

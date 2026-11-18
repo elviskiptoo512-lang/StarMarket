@@ -1,0 +1,102 @@
+.add-product-page {
+    min-height: 100vh;
+    padding: 50px 20px;
+    background: #f5f7fa;
+}
+
+.add-product-container {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 35px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+}
+
+.add-product-container h1 {
+    color: #003b73;
+    margin-bottom: 8px;
+}
+
+.add-product-container>p {
+    color: #666;
+    margin-bottom: 30px;
+}
+
+.add-product-container form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.add-product-container form>label {
+    font-weight: 600;
+    color: #333;
+    margin-top: 8px;
+}
+
+.add-product-container input,
+.add-product-container textarea,
+.add-product-container select {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #ddd;
+    border-radius: 7px;
+    font-size: 15px;
+    font-family: inherit;
+    box-sizing: border-box;
+}
+
+.add-product-container textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.add-product-container input:focus,
+.add-product-container textarea:focus,
+.add-product-container select:focus {
+    outline: none;
+    border-color: #003b73;
+}
+
+.add-product-container .negotiable-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 500;
+}
+
+.add-product-container .negotiable-option input {
+    width: auto;
+}
+
+.add-product-container button {
+    margin-top: 20px;
+    padding: 15px;
+    background: #003b73;
+    color: white;
+    border: none;
+    border-radius: 7px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.add-product-container button:hover {
+    background: #002b55;
+}
+
+.add-product-container button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+@media (max-width: 600px) {
+    .add-product-page {
+        padding: 25px 12px;
+    }
+
+    .add-product-container {
+        padding: 22px;
+    }
+}
