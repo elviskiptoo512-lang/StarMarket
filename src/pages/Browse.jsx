@@ -1,22 +1,44 @@
+
+import { useEffect, useState } from "react";
 import { Search, SlidersHorizontal } from "lucide-react";
 import ProductCard from "../components/ProductCard";
-import products from "../data/products";
+import api from "../services/api";
 import "./Browse.css";
 
 function Browse() {
+    const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
+
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                const response = await api.get("/products");
+
+                const formattedProducts = response.data.map((product) => ({
+                    ...product,
+                    id: product._id,
+                }));
+
+                setProducts(formattedProducts);
+            } catch (err) {
+                setError("Unable to load products. Please try again.");
+                console.error("Product fetching error:", err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchProducts();
+    }, []);
+
     return (
         <main className="browse-page">
-
-            {/* Header */}
             <section className="browse-header">
                 <div>
                     <p className="browse-label">STARMARKET</p>
-
                     <h1>Browse Products</h1>
-
-                    <p>
-                        Find great deals from fellow Daystar students.
-                    </p>
+                    <p>Find great deals from fellow Daystar students.</p>
                 </div>
 
                 <button className="filter-mobile">
@@ -25,26 +47,16 @@ function Browse() {
                 </button>
             </section>
 
-            {/* Search */}
             <section className="browse-search-section">
                 <div className="browse-search">
                     <Search size={20} />
-
-                    <input
-                        type="text"
-                        placeholder="Search for products..."
-                    />
-
+                    <input type="text" placeholder="Search for products..." />
                     <button>Search</button>
                 </div>
             </section>
 
-            {/* Marketplace */}
             <section className="marketplace">
-
-                {/* Filters */}
                 <aside className="filter-sidebar">
-
                     <div className="filter-heading">
                         <h3>Filters</h3>
                         <button>Clear all</button>
@@ -52,67 +64,37 @@ function Browse() {
 
                     <div className="filter-group">
                         <h4>Category</h4>
-
-                        <label>
-                            <input type="checkbox" />
-                            Electronics
-                        </label>
-
-                        <label>
-                            <input type="checkbox" />
-                            Books
-                        </label>
-
-                        <label>
-                            <input type="checkbox" />
-                            Fashion
-                        </label>
-
-                        <label>
-                            <input type="checkbox" />
-                            Furniture
-                        </label>
-
-                        <label>
-                            <input type="checkbox" />
-                            Other
-                        </label>
+                        {["Electronics", "Books", "Fashion", "Furniture", "Other"].map(
+                            (category) => (
+                                <label key={category}>
+                                    <input type="checkbox" />
+                                    {category}
+                                </label>
+                            )
+                        )}
                     </div>
 
                     <div className="filter-group">
                         <h4>Condition</h4>
-
-                        <label>
-                            <input type="checkbox" />
-                            Like New
-                        </label>
-
-                        <label>
-                            <input type="checkbox" />
-                            Good
-                        </label>
-
-                        <label>
-                            <input type="checkbox" />
-                            Fair
-                        </label>
+                        {["Like New", "Good", "Fair"].map((condition) => (
+                            <label key={condition}>
+                                <input type="checkbox" />
+                                {condition}
+                            </label>
+                        ))}
                     </div>
 
                     <div className="filter-group">
                         <h4>Price</h4>
-
                         <div className="price-inputs">
                             <input type="number" placeholder="Min" />
                             <span>—</span>
                             <input type="number" placeholder="Max" />
                         </div>
                     </div>
-
                 </aside>
 
-                {/* Products */}
                 <div className="products-section">
-
                     <div className="products-topbar">
                         <p>
                             <strong>{products.length}</strong> products found
@@ -125,18 +107,21 @@ function Browse() {
                         </select>
                     </div>
 
-                    <div className="products-grid">
-                        {products.map((product) => (
-                            <ProductCard
-                                key={product.id}
-                                product={product}
-                            />
-                        ))}
-                    </div>
+                    {loading ? (
+                        <p>Loading products...</p>
+                    ) : error ? (
+                        <p>{error}</p>
+                    ) : products.length === 0 ? (
+                        <p>No products available yet.</p>
+                    ) : (
+                        <div className="products-grid">
+                            {products.map((product) => (
+                                <ProductCard key={product.id} product={product} />
+                            ))}
+                        </div>
+                    )}
                 </div>
-
             </section>
-
         </main>
     );
 }

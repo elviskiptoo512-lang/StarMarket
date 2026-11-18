@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {
     ArrowLeft,
@@ -10,31 +10,53 @@ import {
     Star,
 } from "lucide-react";
 
-import products from "../data/products";
+import api from "../services/api";
 import "./ProductDetails.css";
 
 function ProductDetails() {
     const { id } = useParams();
     const navigate = useNavigate();
 
+    const [product, setProduct] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
+
     const [selectedImage, setSelectedImage] = useState(0);
     const [isFavorite, setIsFavorite] = useState(false);
     const [showOffer, setShowOffer] = useState(false);
     const [offer, setOffer] = useState("");
 
-    const product = products.find(
-        (item) => item.id === Number(id)
-    );
+    useEffect(() => {
+        const fetchProduct = async () => {
+            try {
+                setLoading(true);
+                setError("");
 
-    if (!product) {
+                const response = await api.get(`/products/${id}`);
+                setProduct({
+                    ...response.data,
+                    id: response.data._id,
+                });
+            } catch (err) {
+                console.error("Product fetching error:", err);
+                setError("Unable to load this product.");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchProduct();
+    }, [id]);
+
+    if (loading) {
+        return <main className="product-not-found">Loading product...</main>;
+    }
+
+    if (error || !product) {
         return (
             <main className="product-not-found">
                 <h1>Product Not Found</h1>
-
-                <p>
-                    Sorry, we couldn't find the product you're looking for.
-                </p>
-
+                <p>{error || "Sorry, we couldn't find this product."}</p>
                 <Link to="/browse">
                     <ArrowLeft size={18} />
                     Back to Browse
@@ -61,27 +83,25 @@ function ProductDetails() {
 
     return (
         <main className="product-details-page">
-
             <Link to="/browse" className="back-button">
                 <ArrowLeft size={18} />
                 Back to Browse
             </Link>
 
             <section className="product-details-container">
-
-                {/* Product Gallery */}
                 <div className="product-gallery">
-
                     <div className="main-product-image">
-
-                        <img
-                            src={product.images[selectedImage]}
-                            alt={product.title}
-                        />
+                        {product.images?.length > 0 ? (
+                            <img
+                                src={product.images[selectedImage]}
+                                alt={product.title}
+                            />
+                        ) : (
+                            <p>No product image available</p>
+                        )}
 
                         <button
-                            className={`details-favorite ${isFavorite ? "active" : ""
-                                }`}
+                            className={`details-favorite ${isFavorite ? "active" : ""}`}
                             onClick={() => setIsFavorite(!isFavorite)}
                             aria-label="Add to favorites"
                         >
@@ -91,40 +111,26 @@ function ProductDetails() {
                             />
                         </button>
 
-                        <span
-                            className={`details-status ${product.status.toLowerCase()}`}
-                        >
+                        <span className={`details-status ${product.status.toLowerCase()}`}>
                             {product.status}
                         </span>
-
                     </div>
 
                     <div className="product-thumbnails">
-
-                        {product.images.map((image, index) => (
+                        {product.images?.map((image, index) => (
                             <button
                                 key={index}
-                                className={`thumbnail ${selectedImage === index ? "selected" : ""
-                                    }`}
+                                className={`thumbnail ${selectedImage === index ? "selected" : ""}`}
                                 onClick={() => setSelectedImage(index)}
                             >
-                                <img
-                                    src={image}
-                                    alt={`${product.title} ${index + 1}`}
-                                />
+                                <img src={image} alt={`${product.title} ${index + 1}`} />
                             </button>
                         ))}
-
                     </div>
-
                 </div>
 
-                {/* Product Information */}
                 <div className="product-details-info">
-
-                    <span className="details-category">
-                        {product.category}
-                    </span>
+                    <span className="details-category">{product.category}</span>
 
                     <h1>{product.title}</h1>
 
@@ -139,36 +145,25 @@ function ProductDetails() {
                     )}
 
                     <div className="details-meta">
-
-                        <span>
-                            Condition: {product.condition}
-                        </span>
+                        <span>Condition: {product.condition}</span>
 
                         <span className="location-meta">
                             <MapPin size={14} />
                             {product.location}
                         </span>
-
                     </div>
 
                     <div className="description-section">
-
                         <h3>Description</h3>
-
                         <p>{product.description}</p>
-
                     </div>
 
-                    {/* Actions */}
                     <div className="details-actions">
-
                         <button
                             className="contact-button"
                             onClick={() =>
                                 navigate(
-                                    `/messages?seller=${encodeURIComponent(
-                                        product.seller
-                                    )}&product=${product.id}`
+                                    `/messages?seller=${encodeURIComponent(product.seller)}&product=${product.id}`
                                 )
                             }
                         >
@@ -182,20 +177,15 @@ function ProductDetails() {
                         >
                             Make an Offer
                         </button>
-
                     </div>
 
-                    {/* Seller */}
                     <div className="seller-card">
-
                         <div className="seller-avatar-large">
-                            {product.seller.charAt(0)}
+                            {product.seller?.charAt(0) || "S"}
                         </div>
 
                         <div className="seller-card-info">
-
                             <div className="seller-name">
-
                                 <strong>{product.seller}</strong>
 
                                 {product.verified && (
@@ -204,36 +194,21 @@ function ProductDetails() {
                                         Daystar Verified
                                     </span>
                                 )}
-
                             </div>
 
                             <div className="seller-rating-large">
-
-                                <Star
-                                    size={15}
-                                    fill="currentColor"
-                                />
-
-                                <strong>{product.rating}</strong>
-
+                                <Star size={15} fill="currentColor" />
+                                <strong>{product.rating ?? "New"}</strong>
                                 <span>Seller rating</span>
-
                             </div>
-
                         </div>
-
                     </div>
-
                 </div>
-
             </section>
 
-            {/* Make Offer Modal */}
             {showOffer && (
                 <div className="offer-overlay">
-
                     <div className="offer-modal">
-
                         <button
                             className="offer-close"
                             onClick={() => setShowOffer(false)}
@@ -243,35 +218,24 @@ function ProductDetails() {
                         </button>
 
                         <h2>Make an Offer</h2>
-
                         <p>{product.title}</p>
 
-                        <label htmlFor="offer">
-                            Your Offer (KSh)
-                        </label>
+                        <label htmlFor="offer">Your Offer (KSh)</label>
 
                         <input
                             id="offer"
                             type="number"
                             placeholder={product.price}
                             value={offer}
-                            onChange={(event) =>
-                                setOffer(event.target.value)
-                            }
+                            onChange={(event) => setOffer(event.target.value)}
                         />
 
-                        <button
-                            className="submit-offer"
-                            onClick={handleSendOffer}
-                        >
+                        <button className="submit-offer" onClick={handleSendOffer}>
                             Send Offer
                         </button>
-
                     </div>
-
                 </div>
             )}
-
         </main>
     );
 }
