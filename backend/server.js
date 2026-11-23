@@ -5,6 +5,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import dns from "node:dns";
 import productRoutes from "./routes/productRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
 
 dotenv.config();
 dns.setServers(["8.8.8.8", "8.8.4.4"]);
@@ -20,6 +21,7 @@ app.use(cors({
 app.use(express.json());
 
 app.use("/api/products", productRoutes);
+app.use("/api/auth", authRoutes);
 
 app.get("/", (req, res) => {
   res.send("StarMarket API is running...");

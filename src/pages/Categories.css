@@ -1,0 +1,129 @@
+.categories-page {
+    min-height: 80vh;
+    background: #f7f8fa;
+    padding: 50px 6%;
+}
+
+.categories-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.categories-label {
+    color: #f4b41a;
+    font-weight: 700;
+    letter-spacing: 2px;
+    font-size: 12px;
+}
+
+.categories-header h1 {
+    color: #003b73;
+    font-size: 36px;
+    margin: 10px 0;
+}
+
+.categories-header>p:last-child {
+    color: #666;
+}
+
+.category-tabs {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 45px;
+}
+
+.category-tabs button {
+    padding: 12px 24px;
+    border: 1px solid #ddd;
+    border-radius: 25px;
+    background: white;
+    color: #444;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.category-tabs button:hover,
+.category-tabs button.active {
+    background: #003b73;
+    color: white;
+    border-color: #003b73;
+}
+
+.category-products {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.category-products-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.category-products-header h2 {
+    color: #003b73;
+}
+
+.category-products-header span {
+    color: #777;
+}
+
+.category-products-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 22px;
+}
+
+.category-empty {
+    background: white;
+    padding: 45px 20px;
+    text-align: center;
+    border-radius: 12px;
+}
+
+.category-empty h3 {
+    color: #003b73;
+    margin-bottom: 10px;
+}
+
+.category-empty p {
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.category-empty a {
+    color: #003b73;
+    font-weight: 600;
+}
+
+@media (max-width: 900px) {
+    .category-products-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 600px) {
+    .categories-page {
+        padding: 35px 18px;
+    }
+
+    .categories-header h1 {
+        font-size: 28px;
+    }
+
+    .category-tabs {
+        gap: 8px;
+    }
+
+    .category-tabs button {
+        padding: 10px 16px;
+    }
+
+    .category-products-grid {
+        gap: 12px;
+    }
+}
