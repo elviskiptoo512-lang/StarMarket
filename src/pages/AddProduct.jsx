@@ -15,10 +15,10 @@ function AddProduct() {
         condition: "",
         location: "",
         seller: "",
-        image: "",
         negotiable: false,
     });
 
+    const [imageFile, setImageFile] = useState(null);
     const [loading, setLoading] = useState(false);
 
     const handleChange = (event) => {
@@ -36,17 +36,37 @@ function AddProduct() {
         try {
             setLoading(true);
 
+            let imageUrl = "";
+
+            // Upload image to Cloudinary
+            if (imageFile) {
+                const imageData = new FormData();
+                imageData.append("image", imageFile);
+
+                const uploadResponse = await api.post(
+                    "/products/upload",
+                    imageData
+                );
+
+                imageUrl = uploadResponse.data.imageUrl;
+            }
+
+            // Save product to MongoDB
             await api.post("/products", {
                 ...formData,
                 price: Number(formData.price),
-                images: formData.image ? [formData.image] : [],
+                images: imageUrl ? [imageUrl] : [],
             });
 
             alert("Product listed successfully!");
             navigate("/browse");
+
         } catch (error) {
             console.error("Product creation error:", error);
-            alert(error.response?.data?.message || "Unable to list product.");
+            alert(
+                error.response?.data?.message ||
+                "Unable to list product. Please try again."
+            );
         } finally {
             setLoading(false);
         }
@@ -134,14 +154,18 @@ function AddProduct() {
                         required
                     />
 
-                    <label>Product Image URL</label>
+                    <label>Product Image</label>
                     <input
-                        type="url"
-                        name="image"
-                        value={formData.image}
-                        onChange={handleChange}
-                        placeholder="https://example.com/image.jpg"
+                        type="file"
+                        accept="image/*"
+                        onChange={(event) =>
+                            setImageFile(event.target.files[0] || null)
+                        }
                     />
+
+                    {imageFile && (
+                        <p>Selected image: {imageFile.name}</p>
+                    )}
 
                     <label className="negotiable-option">
                         <input
@@ -154,7 +178,7 @@ function AddProduct() {
                     </label>
 
                     <button type="submit" disabled={loading}>
-                        {loading ? "Publishing..." : "Publish Product"}
+                        {loading ? "Uploading and Publishing..." : "Publish Product"}
                     </button>
                 </form>
             </div>
