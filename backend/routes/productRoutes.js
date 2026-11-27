@@ -3,7 +3,9 @@ import express from "express";
 import multer from "multer";
 import { Readable } from "node:stream";
 import Product from "../models/Product.js";
+import User from "../models/User.js";
 import cloudinary from "../config/cloudinary.js";
+import authMiddleware from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
@@ -43,7 +45,6 @@ router.post("/upload", upload.single("image"), async (req, res) => {
         );
 
         Readable.from(req.file.buffer).pipe(uploadStream);
-
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -53,6 +54,19 @@ router.post("/upload", upload.single("image"), async (req, res) => {
 router.get("/", async (req, res) => {
     try {
         const products = await Product.find().sort({ createdAt: -1 });
+        res.json(products);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// Get products belonging to the logged-in student
+router.get("/mine", authMiddleware, async (req, res) => {
+    try {
+        const products = await Product.find({
+            sellerId: req.user.id,
+        }).sort({ createdAt: -1 });
+
         res.json(products);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -74,10 +88,90 @@ router.get("/:id", async (req, res) => {
     }
 });
 
-// Create a product
-router.post("/", async (req, res) => {
+
+// Update a student's own product
+router.put("/:id", authMiddleware, async (req, res) => {
     try {
-        const product = await Product.create(req.body);
+        const product = await Product.findOne({
+            _id: req.params.id,
+            sellerId: req.user.id,
+        });
+
+        if (!product) {
+            return res.status(404).json({
+                message: "Product not found or you are not authorized to edit it.",
+            });
+        }
+
+        const allowedFields = [
+            "title",
+            "description",
+            "price",
+            "category",
+            "condition",
+            "location",
+            "images",
+            "status",
+            "negotiable",
+        ];
+
+        allowedFields.forEach((field) => {
+            if (req.body[field] !== undefined) {
+                product[field] = req.body[field];
+            }
+        });
+
+        await product.save();
+
+        res.json({
+            message: "Product updated successfully.",
+            product,
+        });
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+});
+
+// Delete a student's own product
+router.delete("/:id", authMiddleware, async (req, res) => {
+    try {
+        const product = await Product.findOneAndDelete({
+            _id: req.params.id,
+            sellerId: req.user.id,
+        });
+
+        if (!product) {
+            return res.status(404).json({
+                message: "Product not found or you are not authorized to delete it.",
+            });
+        }
+
+        res.json({
+            message: "Product deleted successfully.",
+        });
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+});
+
+
+// Create a product
+router.post("/", authMiddleware, async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id);
+
+        if (!user) {
+            return res.status(404).json({
+                message: "Student account not found.",
+            });
+        }
+
+        const product = await Product.create({
+            ...req.body,
+            seller: user.name,
+            sellerId: user._id,
+        });
+
         res.status(201).json(product);
     } catch (error) {
         res.status(400).json({ message: error.message });

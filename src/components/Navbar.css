@@ -1,11 +1,13 @@
+/* Main Navbar */
 .navbar {
     width: 100%;
-    height: 72px;
+    height: 74px;
     background: #ffffff;
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom: 1px solid #e8edf3;
     position: sticky;
     top: 0;
     z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0, 35, 75, 0.04);
 }
 
 .navbar-container {
@@ -13,53 +15,46 @@
     height: 100%;
     margin: 0 auto;
     padding: 0 24px;
-
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
 /* Logo */
-
 .navbar-logo {
     display: flex;
     align-items: center;
     gap: 8px;
-
     text-decoration: none;
     color: #003b73;
-
-    font-size: 22px;
+    font-size: 23px;
     font-weight: 800;
     white-space: nowrap;
+    letter-spacing: -0.5px;
 }
 
 .logo-star {
     color: #f4b41a;
-    font-size: 27px;
+    font-size: 29px;
 }
 
-/* Navigation */
-
+/* Navigation Links */
 .navbar-links {
     display: flex;
     align-items: center;
-    gap: 28px;
-    margin-left: 40px;
+    gap: 25px;
+    margin-left: 35px;
 }
 
 .navbar-links a {
     display: flex;
     align-items: center;
     gap: 6px;
-
     text-decoration: none;
-    color: #4b5563;
-
+    color: #596579;
     font-size: 14px;
-    font-weight: 500;
-
-    transition: 0.2s ease;
+    font-weight: 550;
+    transition: all 0.2s ease;
 }
 
 .navbar-links a:hover {
@@ -67,91 +62,122 @@
 }
 
 /* Right Actions */
-
 .navbar-actions {
     display: flex;
     align-items: center;
     gap: 12px;
 }
 
-/* Icon Button */
-
+/* Notifications */
 .icon-button {
     width: 40px;
     height: 40px;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
-    color: #4b5563;
+    color: #526174;
     text-decoration: none;
-
-    border-radius: 50%;
-
+    border-radius: 10px;
     transition: 0.2s ease;
 }
 
 .icon-button:hover {
-    background: #f3f4f6;
+    background: #f0f5fa;
     color: #003b73;
 }
 
 /* Profile */
-
 .profile-button {
     display: flex;
     align-items: center;
-    gap: 7px;
-
-    padding: 9px 12px;
-
-    text-decoration: none;
-    color: #374151;
-
-    border-radius: 8px;
-
-    font-size: 14px;
-    font-weight: 500;
-
-    transition: 0.2s ease;
-}
-
-.profile-button:hover {
-    background: #f3f4f6;
+    gap: 8px;
+    padding: 9px 13px;
+    color: #003b73;
+    background: #f0f5fa;
+    border: 1px solid #e2eaf2;
+    border-radius: 9px;
+    font-size: 13px;
+    font-weight: 650;
+    white-space: nowrap;
 }
 
 /* Sell Button */
-
 .sell-button {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 7px;
-
-    padding: 10px 16px;
-
+    padding: 11px 17px;
     background: #003b73;
     color: #ffffff;
-
-    border-radius: 8px;
-
+    border: 1px solid #003b73;
+    border-radius: 9px;
     text-decoration: none;
-
-    font-size: 14px;
-    font-weight: 600;
-
-    transition: 0.2s ease;
+    font-size: 13px;
+    font-weight: 650;
+    white-space: nowrap;
+    transition: all 0.2s ease;
 }
 
 .sell-button:hover {
     background: #002b54;
+    border-color: #002b54;
     transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(0, 59, 115, 0.15);
+}
+
+/* Login Button */
+.login-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 18px;
+    color: #003b73;
+    background: #ffffff;
+    border: 1px solid #003b73;
+    border-radius: 9px;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 650;
+    transition: all 0.2s ease;
+}
+
+.login-button:hover {
+    background: #f0f5fa;
+}
+
+/* Register Button */
+.navbar-actions .sell-button {
+    background: #f4b41a;
+    color: #003b73;
+    border-color: #f4b41a;
+}
+
+.navbar-actions .sell-button:hover {
+    background: #e5a510;
+    border-color: #e5a510;
+}
+
+/* Logout Button */
+.logout-button {
+    padding: 10px 15px;
+    background: #fff5f5;
+    color: #c0392b;
+    border: 1px solid #f3d5d5;
+    border-radius: 9px;
+    font-size: 13px;
+    font-weight: 650;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.logout-button:hover {
+    background: #fee2e2;
+    border-color: #efb5b5;
 }
 
 /* Mobile */
-
 @media (max-width: 900px) {
-
     .navbar-links {
         display: none;
     }
@@ -164,6 +190,10 @@
         padding: 0 16px;
     }
 
+    .navbar-actions {
+        gap: 8px;
+    }
+
     .sell-button span {
         display: none;
     }
@@ -172,8 +202,26 @@
         width: 40px;
         height: 40px;
         padding: 0;
+        border-radius: 9px;
+    }
+}
 
-        justify-content: center;
-        border-radius: 50%;
+@media (max-width: 480px) {
+    .navbar {
+        height: 66px;
+    }
+
+    .navbar-logo {
+        font-size: 20px;
+    }
+
+    .logo-star {
+        font-size: 25px;
+    }
+
+    .login-button,
+    .logout-button {
+        padding: 9px 11px;
+        font-size: 12px;
     }
 }

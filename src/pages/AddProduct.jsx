@@ -14,7 +14,6 @@ function AddProduct() {
         category: "",
         condition: "",
         location: "",
-        seller: "",
         negotiable: false,
     });
 
@@ -145,14 +144,7 @@ function AddProduct() {
                         required
                     />
 
-                    <label>Seller Name</label>
-                    <input
-                        name="seller"
-                        value={formData.seller}
-                        onChange={handleChange}
-                        placeholder="Your name"
-                        required
-                    />
+
 
                     <label>Product Image</label>
                     <input
